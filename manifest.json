@@ -1,0 +1,26 @@
+{
+  "manifest_version": 3,
+  "name": "Long Screenshot ",
+  "version": "4.0",
+  "description": " screenshots ",
+  "permissions": [
+    "tabs",
+    "alarms",
+    "storage",
+    "windows"
+  ],
+  "host_permissions": [
+    "<all_urls>",
+    "https://api.imgbb.com/*"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "action": {
+    "default_popup": "popup.html",
+    "default_icon": "icon.png"
+  },
+  "icons": {
+    "128": "icon.png"
+  }
+}

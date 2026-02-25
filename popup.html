@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      width: 300px;
+      padding: 18px;
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background: #0f0f1a;
+      color: #e0e0f0;
+    }
+
+    /* ── Header ── */
+    .header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 16px;
+    }
+    .header-left { display: flex; align-items: center; gap: 8px; }
+    .header h2  { font-size: 14px; color: #7eb8f7; font-weight: 700; }
+    .version    { font-size: 10px; color: #3a3a5c; background: #1a1a2e;
+                  padding: 2px 6px; border-radius: 4px; }
+
+    /* ── Fields ── */
+    .field { margin-bottom: 11px; }
+    .field label {
+      display: block; font-size: 11px;
+      color: #7070a0; margin-bottom: 4px;
+    }
+    .field input,
+    .field select {
+      width: 100%; padding: 7px 10px;
+      border-radius: 6px; border: 1px solid #2e2e4e;
+      background: #1a1a2e; color: #e0e0f0;
+      font-size: 13px; outline: none;
+      -webkit-appearance: none;
+    }
+    .field input:focus,
+    .field select:focus  { border-color: #7eb8f7; }
+    .field input:disabled,
+    .field select:disabled { opacity: 0.4; cursor: not-allowed; }
+
+    .row2 { display: flex; gap: 10px; }
+    .row2 .field { flex: 1; }
+
+    /* ── Toggle Button ── */
+    #toggleBtn {
+      width: 100%; padding: 10px; border: none;
+      border-radius: 7px; font-size: 13px;
+      font-weight: 700; cursor: pointer;
+      letter-spacing: 0.4px;
+      transition: background 0.2s, transform 0.1s;
+      margin-bottom: 13px;
+    }
+    #toggleBtn:active    { transform: scale(0.98); }
+    #toggleBtn.inactive  { background: #3ddc84; color: #0a0a0a; }
+    #toggleBtn.active    { background: #ff4f5e; color: #fff; }
+
+    /* ── Stats Box ── */
+    .stats-box {
+      background: #1a1a2e; border-radius: 7px;
+      padding: 11px 13px; border: 1px solid #2e2e4e;
+      margin-bottom: 10px;
+    }
+    .stat-row {
+      display: flex; justify-content: space-between;
+      align-items: center; margin-bottom: 6px;
+    }
+    .stat-row:last-child { margin-bottom: 0; }
+    .stat-label  { font-size: 11px; color: #6060a0; }
+    .stat-value  { font-size: 12px; color: #e0e0f0; font-weight: 600; }
+    .green  { color: #3ddc84; }
+    .red    { color: #ff4f5e; }
+    .yellow { color: #f9b44c; }
+    .blue   { color: #7eb8f7; }
+
+    /* ── Photo Counter Card ── */
+    .counter-card {
+      background: #12122a; border: 1px solid #2a2a4e;
+      border-radius: 7px; padding: 10px 13px;
+      display: flex; align-items: center;
+      justify-content: space-between;
+      margin-bottom: 10px;
+    }
+    .counter-left  { font-size: 11px; color: #6060a0; }
+    .counter-num   {
+      font-size: 26px; font-weight: 800;
+      color: #7eb8f7; line-height: 1;
+    }
+    .counter-sub   { font-size: 10px; color: #3a3a5c; margin-top: 2px; }
+    .counter-right { text-align: right; }
+    .session-num   {
+      font-size: 18px; font-weight: 700;
+      color: #3ddc84;
+    }
+
+    /* ── Divider ── */
+    hr { border: none; border-top: 1px solid #1e1e3a; margin: 8px 0; }
+
+    /* ── Last URL ── */
+    .last-url {
+      font-size: 10px; color: #404060;
+      word-break: break-all; line-height: 1.4;
+      padding-top: 7px;
+    }
+    .last-url a { color: #7eb8f7; text-decoration: none; }
+    .last-url a:hover { text-decoration: underline; }
+
+    /* ── Reset button ── */
+    #resetBtn {
+      width: 100%; padding: 7px;
+      background: transparent;
+      border: 1px solid #2e2e4e;
+      border-radius: 6px; color: #5050a0;
+      font-size: 11px; cursor: pointer;
+      transition: all 0.2s;
+    }
+    #resetBtn:hover { border-color: #ff4f5e; color: #ff4f5e; }
+  </style>
+</head>
+<body>
+
+  <!-- Header -->
+  <div class="header">
+    <div class="header-left">
+      <span style="font-size:20px">📸</span>
+      <h2>Screenshot → ImgBB</h2>
+    </div>
+    <span class="version">v4.0</span>
+  </div>
+
+  <!-- Settings Row -->
+  <div class="row2">
+    <div class="field">
+      <label>Interval (seconds)</label>
+      <input type="number" id="intervalInput" min="5" max="3600" value="20" />
+    </div>
+    <div class="field">
+      <label>Auto-Delete After</label>
+      <select id="expirySelect">
+        <option value="0">Never</option>
+        <option value="300">5 Min</option>
+        <option value="3600">1 Hour</option>
+        <option value="86400">24 Hours</option>
+        <option value="604800" selected>7 Days</option>
+        <option value="2592000">30 Days</option>
+      </select>
+    </div>
+  </div>
+
+  <!-- Toggle Button -->
+  <button id="toggleBtn" class="inactive">▶ Start Capturing</button>
+
+  <!-- Photo Counter Card -->
+  <div class="counter-card">
+    <div>
+      <div class="counter-left">📷 Total Uploaded</div>
+      <div class="counter-num" id="totalCount">0</div>
+      <div class="counter-sub">all time</div>
+    </div>
+    <div class="counter-right">
+      <div class="counter-left">This Session</div>
+      <div class="session-num" id="sessionCount">0</div>
+      <div class="counter-sub" id="sessionRate">— /min</div>
+    </div>
+  </div>
+
+  <!-- Live Stats -->
+  <div class="stats-box">
+    <div class="stat-row">
+      <span class="stat-label">Status</span>
+      <span class="stat-value red" id="statusText">⚫ Inactive</span>
+    </div>
+    <div class="stat-row">
+      <span class="stat-label">Interval</span>
+      <span class="stat-value" id="intervalDisp">—</span>
+    </div>
+    <div class="stat-row">
+      <span class="stat-label">Auto-Delete</span>
+      <span class="stat-value" id="expiryDisp">—</span>
+    </div>
+    <div class="stat-row">
+      <span class="stat-label">Last Capture</span>
+      <span class="stat-value blue" id="lastTimeDisp">—</span>
+    </div>
+    <div class="stat-row">
+      <span class="stat-label">Last Error</span>
+      <span class="stat-value yellow" id="lastErrorDisp">None</span>
+    </div>
+    <hr />
+    <div class="last-url" id="lastUrl">No uploads yet</div>
+  </div>
+
+  <!-- Reset Counter -->
+  <button id="resetBtn">🗑 Reset Counter &amp; History</button>
+
+  <script src="popup.js"></script>
+</body>
+</html>
